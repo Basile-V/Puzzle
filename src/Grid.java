@@ -47,28 +47,25 @@ public class Grid {
     public void setAgents(Agent[] agents){
         this.agents = agents;
         for (int i = 0; i < agents.length; i++){
-            this.set(agents[i].getPos()[0], agents[i].getPos()[1], agents[i]);
+            this.set(agents[i].getPos()[0], agents[i].getPos()[1], agents[i], false);
             this.nbMoves --;
         }
     }
 
     public Agent get(int x, int y){
-        return this.grid.get(y).get(x);
-    }
-
-    public synchronized boolean set(int x, int y, Agent a){
-        if(this.get(x, y) == null){
-            this.grid.get(a.getPos()[1]).set(a.getPos()[0], null);
-            this.grid.get(y).set(x, a);
-            this.nbMoves++;
-            return true;
-        }
-        else return false;
+        Agent res = this.grid.get(y).get(x);
+        if (res != null)
+        System.out.println(res.toString() +" x : " + x + " y : "+ y);
+        return res;
     }
 
     public synchronized boolean set(int x, int y, Agent a, boolean verbose){
-        if(this.set(x, y, a)){
-            printGrid();
+        if(this.get(x, y) == null){
+            this.grid.get(a.getPos()[1]).set(a.getPos()[0], null);
+            this.grid.get(y).set(x, a);
+            a.setPos(x, y);
+            this.nbMoves++;
+            if (verbose) printGrid();
             return true;
         } else return false;
     }
