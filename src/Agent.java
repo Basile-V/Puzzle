@@ -31,14 +31,14 @@ public  class Agent extends Thread {
             }
         }
     }
-
-    private void communiquer() {
-
-    }
-
-    private void agir(){
-
-    }
+//
+//    private void communiquer() {
+//
+//    }
+//
+//    private void agir(){
+//
+//    }
 
     private void bouger(){
         Map.Entry<Deplacement, int[]> res = this.cheminLibre(this.pos);
@@ -85,44 +85,6 @@ public  class Agent extends Thread {
                 }
             }
         }
-//        int[] sum;
-//        if(this.obj[0] > this.pos[0]) {
-//            sum = this.futurPos(Deplacement.Bas);
-//            if(this.grid.set(sum[0], sum[1], this, true)){
-//                System.out.println("L'agent " + this.nom + " s'est déplacé vers le bas\n\n");
-//                return;
-//            } else if(this.obj[1] > this.pos[1]){
-//                sum = this.futurPos(Deplacement.Droite);
-//                if(this.grid.set(sum[0], sum[1], this, true)){
-//                    System.out.println("L'agent " + this.nom + " s'est déplacé vers la droite\n\n");
-//                    return;
-//                }
-//            } else if(this.obj[1] < this.pos[1]){
-//                sum = this.futurPos(Deplacement.Gauche);
-//                if(this.grid.set(sum[0], sum[1], this, true)){
-//                    System.out.println("L'agent " + this.nom + " s'est déplacé vers la gauche\n\n");
-//                    return;
-//                }
-//            }
-//        }else if(this.obj[0] < this.pos[0]){
-//            sum = this.futurPos(Deplacement.Haut);
-//            if(this.grid.set(sum[0], sum[1], this, true)){
-//                System.out.println("L'agent " + this.nom + " s'est déplacé vers le haut\n\n");
-//                return;
-//            } else if(this.obj[1] > this.pos[1]){
-//                sum = this.futurPos(Deplacement.Droite);
-//                if(this.grid.set(sum[0], sum[1], this, true)){
-//                    System.out.println("L'agent " + this.nom + " s'est déplacé vers la droite\n\n");
-//                    return;
-//                }
-//            } else if(this.obj[1] < this.pos[1]){
-//                sum = this.futurPos(Deplacement.Gauche);
-//                if(this.grid.set(sum[0], sum[1], this, true)){
-//                    System.out.println("L'agent " + this.nom + " s'est déplacé vers la gauche\n\n");
-//                    return;
-//                }
-//            }
-//        }
     }
 
     public int[] getPos(){
@@ -140,13 +102,11 @@ public  class Agent extends Thread {
     }
 
     private synchronized int[] futurPos(Deplacement deplacement){
-        int[] res = applyOn2Arrays(Integer::sum, this.pos, DeplacementMap.map.get(deplacement));
-        return res;
+        return applyOn2Arrays(Integer::sum, this.pos, DeplacementMap.map.get(deplacement));
     }
 
     private synchronized int[] futurPos(Deplacement deplacement, int[] position){
-        int[] res =  applyOn2Arrays(Integer::sum, position, DeplacementMap.map.get(deplacement));
-        return res;
+        return applyOn2Arrays(Integer::sum, position, DeplacementMap.map.get(deplacement));
     }
 
     private Deplacement[] deplacementsPos() {

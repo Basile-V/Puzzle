@@ -53,10 +53,7 @@ public class Grid {
     }
 
     public Agent get(int x, int y){
-        Agent res = this.grid.get(y).get(x);
-        if (res != null)
-        System.out.println(res.toString() +" x : " + x + " y : "+ y);
-        return res;
+        return this.grid.get(y).get(x);
     }
 
     public synchronized boolean set(int x, int y, Agent a, boolean verbose){
