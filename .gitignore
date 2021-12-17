@@ -1,3 +1,4 @@
+out/
+.idea/
 /Puzzle.iml
-/out/
-/.idea/
+/JavaFxApplication.iml
