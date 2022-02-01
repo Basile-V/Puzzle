@@ -1,7 +1,6 @@
-import java.util.AbstractMap;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+package sample;
+
+import java.util.*;
 import java.util.function.IntBinaryOperator;
 import java.util.stream.IntStream;
 
@@ -43,6 +42,7 @@ public  class Agent extends Thread {
     private void bouger(){
         Map.Entry<Deplacement, int[]> res = this.cheminLibre(this.pos);
         int[] nextPos;
+        Agent a;
         if(res == null){
             int[] vectObj = new int[] {Math.abs(this.pos[0] - this.obj[0]), Math.abs(this.pos[1] - this.obj[1])};
             Deplacement[] deplacements = this.deplacementsPos();
@@ -51,9 +51,19 @@ public  class Agent extends Thread {
                 if (this.grid.set(nextPos[0], nextPos[1], this, true)) {
                     System.out.println("L'agent " + this.nom + " s'est déplacé");
                 } else {
-                    nextPos = this.futurPos(deplacements[1]);
-                    if (this.grid.set(nextPos[0], nextPos[1], this, true)) {
-                        System.out.println("L'agent " + this.nom + " s'est déplacé");
+                    if(deplacements.length > 2){
+                        nextPos = this.futurPos(deplacements[1]);
+                        if (this.grid.set(nextPos[0], nextPos[1], this, true)) {
+                            System.out.println("L'agent " + this.nom + " s'est déplacé");
+                        } else{
+                            a = this.grid.get(nextPos[0], nextPos[1]);
+                            Message m = new Message(this, a, this.obj);
+                            m.notifier();
+                        }
+                    }else{
+                        a = this.grid.get(nextPos[0], nextPos[1]);
+                        Message m = new Message(this, a, this.obj);
+                        m.notifier();
                     }
                 }
             } else if(deplacements[1] != null) {
@@ -64,7 +74,15 @@ public  class Agent extends Thread {
                     nextPos = this.futurPos(deplacements[0]);
                     if (this.grid.set(nextPos[0], nextPos[1], this, true)) {
                         System.out.println("L'agent " + this.nom + " s'est déplacé");
+                    } else{
+                        a = this.grid.get(nextPos[0], nextPos[1]);
+                        Message m = new Message(this, a, this.obj);
+                        m.notifier();
                     }
+                } else{
+                    a = this.grid.get(nextPos[0], nextPos[1]);
+                    Message m = new Message(this, a, this.obj);
+                    m.notifier();
                 }
             }
         } else{
@@ -194,6 +212,55 @@ public  class Agent extends Thread {
             }
         }
         return null;
+    }
+
+    public void makePlace(){
+        Map.Entry<Deplacement, int[]> chemin = this.cheminLibre(this.pos);
+        Deplacement[] deplacement;
+        Deplacement[] deplacements;
+        int[] nextPos;
+        boolean move = false;
+        int i = 0;
+        if(chemin != null){
+            if(this.grid.set(chemin.getValue()[0], chemin.getValue()[1], this, true)){
+                return;
+            }
+        } else{
+            deplacement = this.deplacementsPos();
+            while (i < deplacement.length && !move){
+                if(deplacement[i] != null){
+                    nextPos = this.futurPos(deplacement[i]);
+                    if (this.grid.set(nextPos[0], nextPos[1], this, true)) {
+                        System.out.println("L'agent " + this.nom + " s'est déplacé");
+                        move = true;
+                    }
+                } i++;
+            }
+            if(!move){
+                deplacements = new Deplacement[]{Deplacement.Gauche, Deplacement.Droite, Deplacement.Bas, Deplacement.Haut};
+                i = 0;
+                while (i < deplacement.length && !move){
+                    nextPos = this.futurPos(deplacements[i++]);
+                    if (this.grid.set(nextPos[0], nextPos[1], this, true)) {
+                        System.out.println("L'agent " + this.nom + " s'est déplacé");
+                        move = true;
+                    }
+                }
+                if(!move){
+                    i = 0;
+                    while (i < deplacement.length && !move){
+                        nextPos = this.futurPos(deplacement[i++]);
+                        Agent a = this.grid.get(nextPos[0], nextPos[1]);
+                        Message m = new Message(this, a, this.obj);
+                        m.notifier();
+                        if (this.grid.set(nextPos[0], nextPos[1], this, true)) {
+                            System.out.println("L'agent " + this.nom + " s'est déplacé");
+                            move = true;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public void setPos(int x, int y){
