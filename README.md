@@ -7,5 +7,5 @@ Ce projet est l'implémentation d'un Takin fait à l'aide d'un système multi-ag
 
 Voici une vidéo de la dernière version : 
 
-[./Demo.mp4](Vidéo)
+[Vidéo](./Demo.mp4)
 
